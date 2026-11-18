@@ -367,8 +367,8 @@
         }
       ],
       "path": "data/interventions.csv",
-      "row_count": 19,
-      "sha256": "79e3668dce8e8631a2da6dcb29720f368e0d691d1068ed49186805c497786259"
+      "row_count": 20,
+      "sha256": "7f4fc7e5f0b0f6a1811cf646512ddd64cd0d95b221e24e7b7449caffee785714"
     },
     {
       "name": "rollout_requests",
