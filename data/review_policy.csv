@@ -1,0 +1,4 @@
+policy_id,registered_at,look_day,primary_metric,scope
+P1,2024-12-28T08:00:00+08:00,2025-01-11,need_action_per_hour,all
+P1,2024-12-28T08:00:00+08:00,2025-01-21,need_action_per_hour,all
+P1,2024-12-28T08:00:00+08:00,2025-01-31,need_action_per_hour,all

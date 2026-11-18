@@ -1,0 +1,479 @@
+{
+  "title": "BMS 固件试用的效果判定与扩围控制",
+  "synthetic": true,
+  "tables": [
+    {
+      "name": "code_map",
+      "description": "版本专属告警语义。",
+      "columns": [
+        {
+          "name": "version",
+          "type": "string",
+          "description": "固件",
+          "nullable": true
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "description": "原代码",
+          "nullable": true
+        },
+        {
+          "name": "family",
+          "type": "string",
+          "description": "可比语义",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "version",
+        "code"
+      ],
+      "references": [],
+      "path": "data/code_map.csv",
+      "row_count": 4,
+      "sha256": "2e9052447228d6d634be7e0737a2fb5a1beaf7e8d70205f9393de371e59a8415"
+    },
+    {
+      "name": "stations",
+      "description": "站与班组能力。",
+      "columns": [
+        {
+          "name": "station_id",
+          "type": "string",
+          "description": "站",
+          "nullable": true
+        },
+        {
+          "name": "region",
+          "type": "integer",
+          "description": "区域",
+          "nullable": true
+        },
+        {
+          "name": "checks_daily",
+          "type": "integer",
+          "description": "每日检查名额",
+          "nullable": true
+        },
+        {
+          "name": "action_minutes_daily",
+          "type": "integer",
+          "description": "处置分钟容量",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "station_id"
+      ],
+      "references": [],
+      "path": "data/stations.csv",
+      "row_count": 6,
+      "sha256": "af40429c5dc39fcc2252fb6d5bc7c5d835bde7ee5902a7a83b6c079f296e6403"
+    },
+    {
+      "name": "assignment",
+      "description": "登记的组日安排。",
+      "columns": [
+        {
+          "name": "exposure_id",
+          "type": "string",
+          "description": "组日",
+          "nullable": true
+        },
+        {
+          "name": "station_id",
+          "type": "string",
+          "description": "站",
+          "nullable": true
+        },
+        {
+          "name": "group_id",
+          "type": "integer",
+          "description": "组",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "description": "日期",
+          "nullable": true
+        },
+        {
+          "name": "assigned_version",
+          "type": "string",
+          "description": "安排版本",
+          "nullable": true
+        },
+        {
+          "name": "registered_at",
+          "type": "datetime",
+          "description": "登记时点",
+          "nullable": true
+        },
+        {
+          "name": "available_at",
+          "type": "datetime",
+          "description": "可知时点",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "exposure_id"
+      ],
+      "references": [
+        {
+          "column": "station_id",
+          "target_table": "stations",
+          "target_column": "station_id"
+        }
+      ],
+      "path": "data/assignment.csv",
+      "row_count": 360,
+      "sha256": "3f8e3788d5dd31dea6a1211e3637ec42530be01790d6a2eceba865e469008b23"
+    },
+    {
+      "name": "resident",
+      "description": "组日实际版本与暴露。",
+      "columns": [
+        {
+          "name": "exposure_id",
+          "type": "string",
+          "description": "组日",
+          "nullable": true
+        },
+        {
+          "name": "resident_version",
+          "type": "string",
+          "description": "实际固件",
+          "nullable": true
+        },
+        {
+          "name": "run_hours",
+          "type": "number",
+          "description": "有效运行小时",
+          "nullable": true
+        },
+        {
+          "name": "load_index",
+          "type": "number",
+          "description": "负荷指数",
+          "nullable": true
+        },
+        {
+          "name": "age_days",
+          "type": "integer",
+          "description": "设备日龄",
+          "nullable": true
+        },
+        {
+          "name": "available_at",
+          "type": "datetime",
+          "description": "可知时点",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "exposure_id"
+      ],
+      "references": [
+        {
+          "column": "exposure_id",
+          "target_table": "assignment",
+          "target_column": "exposure_id"
+        }
+      ],
+      "path": "data/resident.csv",
+      "row_count": 360,
+      "sha256": "dfd9375d98617bae7e68f07af2a6d33869a33f06c257e66fdbbe90b2d92b6a41"
+    },
+    {
+      "name": "alarms",
+      "description": "原始报送；同event重复不代表独立事件。",
+      "columns": [
+        {
+          "name": "message_id",
+          "type": "string",
+          "description": "报送",
+          "nullable": true
+        },
+        {
+          "name": "event_id",
+          "type": "string",
+          "description": "现场疑点",
+          "nullable": true
+        },
+        {
+          "name": "exposure_id",
+          "type": "string",
+          "description": "组日",
+          "nullable": true
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "description": "告警码",
+          "nullable": true
+        },
+        {
+          "name": "occurred_at",
+          "type": "datetime",
+          "description": "报送时点",
+          "nullable": true
+        },
+        {
+          "name": "available_at",
+          "type": "datetime",
+          "description": "可知时点",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "message_id"
+      ],
+      "references": [
+        {
+          "column": "exposure_id",
+          "target_table": "assignment",
+          "target_column": "exposure_id"
+        }
+      ],
+      "path": "data/alarms.csv",
+      "row_count": 224,
+      "sha256": "ee4c17e9340ab5138b46803faf624d9437dc21ef09f42791b5d1ea30c2008c04"
+    },
+    {
+      "name": "verifications",
+      "description": "现场核实含无告警抽查。",
+      "columns": [
+        {
+          "name": "check_id",
+          "type": "string",
+          "description": "检查",
+          "nullable": true
+        },
+        {
+          "name": "event_id",
+          "type": "string",
+          "description": "疑点",
+          "nullable": true
+        },
+        {
+          "name": "exposure_id",
+          "type": "string",
+          "description": "组日",
+          "nullable": true
+        },
+        {
+          "name": "selection",
+          "type": "string",
+          "description": "random或targeted",
+          "nullable": true
+        },
+        {
+          "name": "probability",
+          "type": "number",
+          "description": "随机入选概率",
+          "nullable": true
+        },
+        {
+          "name": "checked_at",
+          "type": "datetime",
+          "description": "安排检查",
+          "nullable": true
+        },
+        {
+          "name": "need_action",
+          "type": "boolean",
+          "description": "核实需处置或未知",
+          "nullable": true
+        },
+        {
+          "name": "delay_minutes",
+          "type": "number",
+          "description": "处置延迟",
+          "nullable": true
+        },
+        {
+          "name": "available_at",
+          "type": "datetime",
+          "description": "结果可知时点",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "check_id"
+      ],
+      "references": [
+        {
+          "column": "exposure_id",
+          "target_table": "assignment",
+          "target_column": "exposure_id"
+        }
+      ],
+      "path": "data/verifications.csv",
+      "row_count": 213,
+      "sha256": "42eecfd970b18455abc8c1233f87a9c2d9786ca7d55ffb28a90cb1797217dd66"
+    },
+    {
+      "name": "interventions",
+      "description": "严重事件后的处置。",
+      "columns": [
+        {
+          "name": "intervention_id",
+          "type": "string",
+          "description": "处置",
+          "nullable": true
+        },
+        {
+          "name": "exposure_id",
+          "type": "string",
+          "description": "组日",
+          "nullable": true
+        },
+        {
+          "name": "started_at",
+          "type": "datetime",
+          "description": "开始",
+          "nullable": true
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "description": "rollback或inspection_stop",
+          "nullable": true
+        },
+        {
+          "name": "hours",
+          "type": "number",
+          "description": "干预时长",
+          "nullable": true
+        },
+        {
+          "name": "available_at",
+          "type": "datetime",
+          "description": "可知时点",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "intervention_id"
+      ],
+      "references": [
+        {
+          "column": "exposure_id",
+          "target_table": "assignment",
+          "target_column": "exposure_id"
+        }
+      ],
+      "path": "data/interventions.csv",
+      "row_count": 19,
+      "sha256": "79e3668dce8e8631a2da6dcb29720f368e0d691d1068ed49186805c497786259"
+    },
+    {
+      "name": "rollout_requests",
+      "description": "扩围风险与容量需求。",
+      "columns": [
+        {
+          "name": "request_id",
+          "type": "string",
+          "description": "申请",
+          "nullable": true
+        },
+        {
+          "name": "station_id",
+          "type": "string",
+          "description": "站",
+          "nullable": true
+        },
+        {
+          "name": "units",
+          "type": "integer",
+          "description": "拟扩围设备数",
+          "nullable": true
+        },
+        {
+          "name": "safety_increment",
+          "type": "number",
+          "description": "安全风险增加上限",
+          "nullable": true
+        },
+        {
+          "name": "nuisance_reduction",
+          "type": "number",
+          "description": "打扰减少目标",
+          "nullable": true
+        },
+        {
+          "name": "cutoff",
+          "type": "datetime",
+          "description": "观察截止",
+          "nullable": true
+        },
+        {
+          "name": "review_by",
+          "type": "date",
+          "description": "答复期限",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "request_id"
+      ],
+      "references": [
+        {
+          "column": "station_id",
+          "target_table": "stations",
+          "target_column": "station_id"
+        }
+      ],
+      "path": "data/rollout_requests.csv",
+      "row_count": 6,
+      "sha256": "d850450a3b7751a266e0c5ab07650ef4145111b7e2af7abd6a7af4827c54b1d2"
+    },
+    {
+      "name": "review_policy",
+      "description": "事先登记查看与主要指标。",
+      "columns": [
+        {
+          "name": "policy_id",
+          "type": "string",
+          "description": "登记",
+          "nullable": true
+        },
+        {
+          "name": "registered_at",
+          "type": "datetime",
+          "description": "登记时刻",
+          "nullable": true
+        },
+        {
+          "name": "look_day",
+          "type": "date",
+          "description": "查看日期",
+          "nullable": true
+        },
+        {
+          "name": "primary_metric",
+          "type": "string",
+          "description": "主要指标",
+          "nullable": true
+        },
+        {
+          "name": "scope",
+          "type": "string",
+          "description": "站群范围",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "policy_id",
+        "look_day"
+      ],
+      "references": [],
+      "path": "data/review_policy.csv",
+      "row_count": 3,
+      "sha256": "ba54eeb6b45bdd19087b53f480b65e1cc1a7b1de0ef595a160a42a27429b6af1"
+    }
+  ]
+}

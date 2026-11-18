@@ -1,0 +1,7 @@
+station_id,region,checks_daily,action_minutes_daily
+S1,1,3,50
+S2,0,4,60
+S3,1,2,70
+S4,0,3,80
+S5,1,4,90
+S6,0,2,100

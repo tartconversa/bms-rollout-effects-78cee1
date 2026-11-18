@@ -1,0 +1,5 @@
+version,code,family
+old,A1,thermal
+new,T01,thermal
+old,B1,voltage
+new,V09,voltage
